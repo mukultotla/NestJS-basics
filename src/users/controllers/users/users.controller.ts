@@ -1,5 +1,6 @@
 import { Body, ConsoleLogger, Controller, Get, Param, Post, Query, Req, Res, UsePipes, ValidationPipe, ParseIntPipe, ParseBoolPipe, HttpException, HttpStatus } from '@nestjs/common';
 import { createUserDto } from 'src/users/dtos/createUser.dto';
+import { ValidateCreateUserPipe } from 'src/users/pipes/validate-create-user/validate-create-user.pipe';
 import { UsersService } from 'src/users/services/users/users.service';
 
 @Controller('users')
@@ -36,7 +37,7 @@ export class UsersController {
     //     response.send('Created');
     // }
     @UsePipes(new ValidationPipe())
-    createUser(@Body() userData: createUserDto){
+    createUser(@Body(ValidateCreateUserPipe) userData: createUserDto){
         console.log(userData);
         return this.userService.createUser(userData);
     }
