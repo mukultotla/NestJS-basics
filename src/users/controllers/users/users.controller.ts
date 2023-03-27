@@ -1,6 +1,5 @@
-import { Body, ConsoleLogger, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { Body, ConsoleLogger, Controller, Get, Param, Post, Query, Req, Res, UsePipes, ValidationPipe, ParseIntPipe, ParseBoolPipe } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { request } from 'http';
 import { createUserDto } from 'src/users/dtos/createUser.dto';
 
 @Controller('users')
@@ -9,7 +8,7 @@ export class UsersController {
     // Get 
     // Query Params
     @Get()
-    getUsers(@Query('sortBy') sortBy: string, @Query('flag') flag: string){
+    getUsers(@Query('sortBy') sortBy: string, @Query('flag', ParseBoolPipe) flag: boolean){
         console.log(sortBy, flag)
         return {username: 'Mukul'};
     }
@@ -30,6 +29,7 @@ export class UsersController {
     //     console.log(request.body);
     //     response.send('Created');
     // }
+    @UsePipes(new ValidationPipe())
     createUser(@Body() userData: createUserDto){
         console.log(userData);
         return {}
@@ -39,7 +39,7 @@ export class UsersController {
     //  getUserById(@Req() request: Request, @Res() response: Response){
     //     console.log(request.params);
     //     response.send('')
-    getUserById(@Param('id') id:string){
+    getUserById(@Param('id', ParseIntPipe) id:number){
         console.log(id)
         return { id }
     }
